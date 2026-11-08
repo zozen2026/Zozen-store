@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zozen Store - Apps Hub with Custom Icons</title>
     
+    <!-- ربط ملف الـ Manifest لتجهيز التطبيق لمتجر مايكروسوفت -->
+    <link rel="manifest" href="manifest.json">
+    
     <!-- مكتبة Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -349,7 +352,6 @@
             }
         }
 
-        // إنشاء الاختصار حصرياً عبر نظام ويندوز بدون أي تحميل متصفح أو امتداد .download
         async function createDesktopShortcut(url, name) {
             if (!url || url === '#' || url === 'undefined' || url === 'null') {
                 alert(`عذراً، هذا التطبيق لا يحتوي على رابط صالح.`);
@@ -361,7 +363,6 @@
             }
 
             try {
-                // الطريقة الرسمية لـ Tauri v1 / v2 للاتصال بالخلفية
                 const invoke = window.__TAURI__?.invoke || window.__TAURI__?.core?.invoke;
                 
                 if (!invoke) {
