@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zozen Store - Apps Hub</title>
+    <title>Zozen Store - Direct Apps Hub</title>
     
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -16,6 +16,7 @@
             --accent-hover: #0052cc;
             --card-bg: #f8f9fa;
             --border-color: #e5e5e5;
+            --success-color: #10b981;
         }
 
         body {
@@ -70,11 +71,17 @@
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 24px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
         }
 
         .card-top {
@@ -85,10 +92,10 @@
         }
 
         .app-favicon {
-            width: 36px;
-            height: 36px;
-            object-fit: contain;
-            border-radius: 8px;
+            width: 44px;
+            height: 44px;
+            object-fit: cover;
+            border-radius: 10px;
             background: #fff;
             padding: 4px;
             border: 1px solid var(--border-color);
@@ -99,6 +106,20 @@
             margin: 0 0 6px 0;
             font-size: 17px;
             color: #111;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: #e0edff;
+            color: var(--accent-color);
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         .card-header p {
@@ -108,89 +129,123 @@
             line-height: 1.4;
         }
 
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: auto;
+        .file-meta {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 14px;
+            background: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
         }
 
-        .app-launch-btn, .app-shortcut-btn {
+        .app-download-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             width: 100%;
-            padding: 10px;
+            padding: 11px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
             box-sizing: border-box;
-            transition: all 0.2s ease;
-        }
-
-        .app-launch-btn {
+            text-decoration: none;
             background-color: var(--accent-color);
-            border: 2px solid var(--accent-color);
+            border: none;
             color: #ffffff;
+            transition: background-color 0.2s ease;
         }
 
-        .app-launch-btn:hover {
+        .app-download-btn:hover {
             background-color: var(--accent-hover);
-        }
-
-        .app-shortcut-btn {
-            background-color: #ffffff;
-            border: 2px solid var(--accent-color);
-            color: var(--accent-color);
-        }
-
-        .app-shortcut-btn:hover {
-            background-color: #f0f4ff;
         }
 
         .dev-section {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 30px;
             margin-bottom: 40px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group input[type="text"], .form-group textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background: #fff;
+        }
+
+        /* منطقة السحب والإفلات */
+        .drop-zone {
+            border: 2px dashed #b0c4de;
+            border-radius: 10px;
+            padding: 35px 20px;
+            text-align: center;
+            background-color: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--accent-color);
+            background-color: #f0f6ff;
+        }
+
+        .drop-zone.has-file {
+            border-color: var(--success-color);
+            background-color: #ecfdf5;
+        }
+
+        .drop-zone p {
+            margin: 0;
+            font-size: 15px;
+            color: #444;
             font-weight: 500;
         }
 
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
+        .drop-zone span {
+            display: block;
+            margin-top: 6px;
+            font-size: 12px;
+            color: #777;
         }
 
         .btn-submit {
             background-color: var(--accent-color);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
+            padding: 13px 26px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 15px;
+            width: 100%;
+            transition: background-color 0.2s ease;
         }
 
-        .btn-submit:hover {
+        .btn-submit:hover:not(:disabled) {
             background-color: var(--accent-hover);
+        }
+
+        .btn-submit:disabled {
+            background-color: #99c2ff;
+            cursor: not-allowed;
         }
 
         footer {
@@ -206,51 +261,108 @@
 
     <header>
         <h1>Zozen Store</h1>
-        <span>Custom Icons Apps Hub</span>
+        <span>Direct APK & AAB Packages Hub</span>
     </header>
 
     <div class="container">
-        <div class="section-title">Store Applications</div>
+        <div class="section-title">Available Applications</div>
         <div class="grid" id="appsContainer">
-            <p id="loadingText" style="color: #888;">Loading applications from database...</p>
+            <p id="loadingText" style="color: #888;">Loading packages from store...</p>
         </div>
 
-        <div class="section-title">Developer Hub - Publish App</div>
+        <div class="section-title">Developer Hub - Upload Package</div>
         <div class="dev-section">
             <div class="form-group">
                 <label>Application Name</label>
-                <input type="text" id="appName" placeholder="e.g. YouTube">
+                <input type="text" id="appName" placeholder="e.g. Doors OS Mobile">
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <textarea id="appDesc" rows="3" placeholder="Brief explanation..."></textarea>
+                <textarea id="appDesc" rows="3" placeholder="What does this app do?"></textarea>
             </div>
             <div class="form-group">
-                <label>Target URL / App Link</label>
-                <input type="text" id="appExeUrl" placeholder="https://www.youtube.com">
+                <label>App Package File (.apk, .aab, .exe, .zip)</label>
+                <div class="drop-zone" id="dropZone">
+                    <p id="dropZoneText">Drag & Drop your APK or AAB file here</p>
+                    <span id="dropZoneSubtext">or click to browse from your device</span>
+                    <input type="file" id="appFileInput" accept=".apk,.aab,.exe,.zip" style="display: none;">
+                </div>
             </div>
-            <button class="btn-submit" onclick="publishApp()">Publish Application</button>
+            <button class="btn-submit" id="publishBtn" onclick="publishApp()">Upload & Publish Package</button>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 Zozen Store. All rights reserved.
+        &copy; 2026 Zozen Store. Direct Verified Packages.
     </footer>
 
     <script>
         const SUPABASE_URL = "https://lzvtnfdgynwczrkwlwhf.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6dnRuZmRneW53Y3pya3dsd2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNDIxMTEsImV4cCI6MjEwNDcxODExMX0.w2hNlJ4SszyMBkUVjr1qiWNTTPxHMHkM9YOFtVP-pVI";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const BUCKET_NAME = 'app-packages';
+
+        let selectedFile = null;
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('appFileInput');
+        const dropZoneText = document.getElementById('dropZoneText');
+        const dropZoneSubtext = document.getElementById('dropZoneSubtext');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                handleFileSelection(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelection(e.target.files[0]);
+            }
+        });
+
+        function handleFileSelection(file) {
+            const allowedExtensions = ['apk', 'aab', 'exe', 'zip'];
+            const ext = file.name.split('.').pop().toLowerCase();
+            
+            if (!allowedExtensions.includes(ext)) {
+                alert('يرجى اختيار ملف بصيغة APK أو AAB أو EXE أو ZIP فقط.');
+                return;
+            }
+
+            selectedFile = file;
+            const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+            dropZone.classList.add('has-file');
+            dropZoneText.textContent = `Selected: ${file.name}`;
+            dropZoneSubtext.textContent = `Package Type: .${ext.toUpperCase()} | Size: ${sizeMB} MB`;
+        }
 
         async function fetchApps() {
             const container = document.getElementById('appsContainer');
             try {
-                const { data: apps, error } = await supabaseClient.from('apps').select('*');
+                const { data: apps, error } = await supabaseClient
+                    .from('apps')
+                    .select('*')
+                    .order('id', { ascending: false });
+
                 if (error) throw error;
 
                 container.innerHTML = '';
                 if (!apps || apps.length === 0) {
-                    container.innerHTML = '<p style="color: #888;">No applications available yet.</p>';
+                    container.innerHTML = '<p style="color: #888;">No packages uploaded yet.</p>';
                     return;
                 }
 
@@ -258,101 +370,101 @@
                     const card = document.createElement('div');
                     card.className = 'card';
                     
-                    const targetUrl = app.exe_url || app.file_url || '#';
+                    const fileUrl = app.exe_url || app.file_url || '#';
                     const appName = app.name || 'Untitled App';
-                    const appDesc = app.description || 'No description provided.';
+                    const appDesc = app.description || 'Official direct package.';
+                    
+                    const cleanUrl = fileUrl.split('?')[0];
+                    const fileName = cleanUrl.split('/').pop() || `${appName}.apk`;
+                    const ext = fileName.includes('.') ? fileName.split('.').pop().toUpperCase() : 'PKG';
 
-                    let domain = '';
-                    try {
-                        const parsed = new URL(targetUrl.startsWith('http') ? targetUrl : 'https://' + targetUrl);
-                        domain = parsed.hostname;
-                    } catch (e) {
-                        domain = '';
-                    }
-                    const faviconUrl = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=64` : 'https://cdn-icons-png.flaticon.com/512/5977/5977575.png';
+                    const iconUrl = ext === 'APK' || ext === 'AAB' 
+                        ? 'https://cdn-icons-png.flaticon.com/512/226/226770.png' 
+                        : 'https://cdn-icons-png.flaticon.com/512/5977/5977575.png';
 
                     card.innerHTML = `
                         <div>
                             <div class="card-top">
-                                <img src="${faviconUrl}" class="app-favicon" alt="icon" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5977/5977575.png'">
+                                <img src="${iconUrl}" class="app-favicon" alt="App Icon">
                                 <div class="card-header">
-                                    <h3>${appName}</h3>
+                                    <h3>${appName} <span class="badge">${ext}</span></h3>
                                     <p>${appDesc}</p>
                                 </div>
                             </div>
+                            <div class="file-meta">
+                                File: <strong>${decodeURIComponent(fileName)}</strong>
+                            </div>
                         </div>
-                        <div class="btn-group">
-                            <button onclick="launchAsApp('${targetUrl.replace(/'/g, "\\'")}')" class="app-launch-btn">
-                                Launch App Window
-                            </button>
-                            <button onclick="createDesktopShortcut('${targetUrl.replace(/'/g, "\\'")}', '${appName.replace(/'/g, "\\'")}')" class="app-shortcut-btn">
-                                Download .url Shortcut
-                            </button>
-                        </div>
+                        <a href="${fileUrl}" download="${decodeURIComponent(fileName)}" class="app-download-btn">
+                            ⬇ Download Direct (${ext})
+                        </a>
                     `;
                     container.appendChild(card);
                 });
             } catch (err) {
                 console.error('Error fetching apps:', err);
-                container.innerHTML = '<p style="color: #d9534f;">Failed to load items. Please check your Supabase configuration.</p>';
+                container.innerHTML = '<p style="color: #d9534f;">Failed to load packages. Check Supabase connection.</p>';
             }
-        }
-
-        async function launchAsApp(url) {
-            if (!url || url === '#' || url === 'undefined' || url === 'null') {
-                alert('عذراً، هذا التطبيق لا يحتوي على رابط صالح.');
-                return;
-            }
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
-            window.open(url, '_blank');
-        }
-
-        function createDesktopShortcut(url, name) {
-            if (!url || url === '#' || url === 'undefined' || url === 'null') {
-                alert('عذراً، هذا التطبيق لا يحتوي على رابط صالح.');
-                return;
-            }
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
-
-            const shortcutContent = `[InternetShortcut]\nURL=${url}\n`;
-            const blob = new Blob([shortcutContent], { type: 'text/plain;charset=utf-8' });
-            const link = document.createElement8 ? document.createElement('a') : document.createElement('a'); // simplified
-            link.href = URL.createObjectURL(blob);
-            
-            const safeName = name.replace(/[/\\?%*:|"<>]/g, '_');
-            link.download = `${safeName}.url`;
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
 
         async function publishApp() {
             const name = document.getElementById('appName').value.trim();
             const description = document.getElementById('appDesc').value.trim();
-            const exe_url = document.getElementById('appExeUrl').value.trim();
+            const publishBtn = document.getElementById('publishBtn');
 
-            if (!name || !exe_url) {
-                alert('Please provide both the Application Name and URL.');
+            if (!name || !selectedFile) {
+                alert('Please enter the Application Name and drop an APK/AAB file.');
                 return;
             }
 
-            try {
-                const { error } = await supabaseClient.from('apps').insert([{ name, description, exe_url }]);
-                if (error) throw error;
+            publishBtn.disabled = true;
+            publishBtn.textContent = 'Uploading Package... Please wait';
 
-                alert('Application published successfully!');
+            try {
+                const safeFileName = `${Date.now()}_${selectedFile.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+
+                const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                    .from(BUCKET_NAME)
+                    .upload(safeFileName, selectedFile, {
+                        cacheControl: '3600',
+                        upsert: false
+                    });
+
+                if (uploadError) throw uploadError;
+
+                const { data: publicUrlData } = supabaseClient.storage
+                    .from(BUCKET_NAME)
+                    .getPublicUrl(safeFileName);
+
+                const directFileUrl = publicUrlData.publicUrl;
+
+                const { error: dbError } = await supabaseClient
+                    .from('apps')
+                    .insert([{ 
+                        name, 
+                        description, 
+                        exe_url: directFileUrl 
+                    }]);
+
+                if (dbError) throw dbError;
+
+                alert('Package uploaded and published successfully!');
+                
                 document.getElementById('appName').value = '';
                 document.getElementById('appDesc').value = '';
-                document.getElementById('appExeUrl').value = '';
+                selectedFile = null;
+                fileInput.value = '';
+                dropZone.classList.remove('has-file');
+                dropZoneText.textContent = 'Drag & Drop your APK or AAB file here';
+                dropZoneSubtext.textContent = 'or click to browse from your device';
+                
                 fetchApps();
             } catch (err) {
-                console.error('Error inserting app:', err);
-                alert('Error publishing application: ' + err.message);
+                console.error('Error publishing package:', err);
+                alert('Upload failed: ' + err.message);
+            } finally {
+                publishBtn.disabled = false;
+                publishBtn.textContent = 'Upload & Publish Package';
             }
         }
 
