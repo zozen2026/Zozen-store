@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zozen Store - Direct Apps Hub</title>
+    <title>Zozen Store - Direct APK & AAB Packages Hub</title>
     
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,6 +17,7 @@
             --card-bg: #f8f9fa;
             --border-color: #e5e5e5;
             --success-color: #10b981;
+            --star-color: #f59e0b;
         }
 
         body {
@@ -63,7 +64,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
         }
@@ -72,7 +73,7 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 24px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -88,7 +89,7 @@
             display: flex;
             align-items: flex-start;
             gap: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .app-favicon {
@@ -103,13 +104,20 @@
         }
 
         .card-header h3 {
-            margin: 0 0 6px 0;
+            margin: 0 0 4px 0;
             font-size: 17px;
             color: #111;
             display: flex;
             align-items: center;
             gap: 8px;
             flex-wrap: wrap;
+        }
+
+        .developer-name {
+            font-size: 12px;
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 6px;
         }
 
         .badge {
@@ -123,20 +131,96 @@
         }
 
         .card-header p {
-            color: #666;
+            color: #555;
             font-size: 13px;
-            margin: 0;
+            margin: 0 0 10px 0;
             line-height: 1.4;
+        }
+
+        /* نظام النجوم */
+        .stars-container {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--star-color);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stars-container span {
+            color: #777;
+            font-size: 12px;
+            margin-left: 6px;
         }
 
         .file-meta {
             font-size: 12px;
             color: #888;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             background: #fff;
             padding: 6px 10px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
+        }
+
+        /* قسم التعليقات المصغر داخل البطاقة */
+        .reviews-box {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 14px;
+            max-height: 110px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+
+        .reviews-box h5 {
+            margin: 0 0 6px 0;
+            font-size: 12px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 4px;
+        }
+
+        .review-item {
+            margin-bottom: 6px;
+            color: #555;
+            border-bottom: 1px dashed #f0f0f0;
+            padding-bottom: 4px;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .add-review-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .add-review-row input {
+            flex: 1;
+            padding: 6px 8px;
+            font-size: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+
+        .add-review-row button {
+            padding: 6px 10px;
+            font-size: 12px;
+            background: #eee;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .add-review-row button:hover {
+            background: #e2e8f0;
         }
 
         .app-download-btn {
@@ -191,18 +275,16 @@
             background: #fff;
         }
 
-        /* منطقة السحب والإفلات */
         .drop-zone {
             border: 2px dashed #b0c4de;
             border-radius: 10px;
-            padding: 35px 20px;
+            padding: 25px 20px;
             text-align: center;
             background-color: #ffffff;
-            cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .drop-zone:hover, .drop-zone.dragover {
+        .drop-zone.dragover {
             border-color: var(--accent-color);
             background-color: #f0f6ff;
         }
@@ -213,17 +295,29 @@
         }
 
         .drop-zone p {
-            margin: 0;
-            font-size: 15px;
+            margin: 0 0 12px 0;
+            font-size: 14px;
             color: #444;
             font-weight: 500;
         }
 
-        .drop-zone span {
-            display: block;
-            margin-top: 6px;
-            font-size: 12px;
-            color: #777;
+        .btn-browse {
+            background-color: #e2e8f0;
+            color: #1e293b;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-browse:hover {
+            background-color: #cbd5e1;
         }
 
         .btn-submit {
@@ -277,6 +371,10 @@
                 <input type="text" id="appName" placeholder="e.g. Doors OS Mobile">
             </div>
             <div class="form-group">
+                <label>Developer / Publisher Name</label>
+                <input type="text" id="appDev" placeholder="e.g. Zozen Team">
+            </div>
+            <div class="form-group">
                 <label>Description</label>
                 <textarea id="appDesc" rows="3" placeholder="What does this app do?"></textarea>
             </div>
@@ -284,7 +382,9 @@
                 <label>App Package File (.apk, .aab, .exe, .zip)</label>
                 <div class="drop-zone" id="dropZone">
                     <p id="dropZoneText">Drag & Drop your APK or AAB file here</p>
-                    <span id="dropZoneSubtext">or click to browse from your device</span>
+                    <button type="button" class="btn-browse" onclick="document.getElementById('appFileInput').click()">
+                        📁 Browse Device (APK / AAB)
+                    </button>
                     <input type="file" id="appFileInput" accept=".apk,.aab,.exe,.zip" style="display: none;">
                 </div>
             </div>
@@ -307,9 +407,6 @@
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('appFileInput');
         const dropZoneText = document.getElementById('dropZoneText');
-        const dropZoneSubtext = document.getElementById('dropZoneSubtext');
-
-        dropZone.addEventListener('click', () => fileInput.click());
 
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
@@ -346,8 +443,7 @@
             selectedFile = file;
             const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
             dropZone.classList.add('has-file');
-            dropZoneText.textContent = `Selected: ${file.name}`;
-            dropZoneSubtext.textContent = `Package Type: .${ext.toUpperCase()} | Size: ${sizeMB} MB`;
+            dropZoneText.innerHTML = `✅ Selected: <strong>${file.name}</strong> <br><span style="font-size:12px; color:#555;">Type: .${ext.toUpperCase()} | Size: ${sizeMB} MB</span>`;
         }
 
         async function fetchApps() {
@@ -372,6 +468,7 @@
                     
                     const fileUrl = app.exe_url || app.file_url || '#';
                     const appName = app.name || 'Untitled App';
+                    const devName = app.developer || 'Zozen Official';
                     const appDesc = app.description || 'Official direct package.';
                     
                     const cleanUrl = fileUrl.split('?')[0];
@@ -382,19 +479,55 @@
                         ? 'https://cdn-icons-png.flaticon.com/512/226/226770.png' 
                         : 'https://cdn-icons-png.flaticon.com/512/5977/5977575.png';
 
+                    // تحضير التعليقات (إذا كانت مخزنة كـ JSON أو مصفوفة، وإلا عرض تعليق افتراضي ترحيبي)
+                    let reviewsList = [];
+                    try {
+                        reviewsList = typeof app.reviews === 'string' ? JSON.parse(app.reviews) : (app.reviews || []);
+                    } catch(e) {
+                        reviewsList = [];
+                    }
+
+                    if(reviewsList.length === 0) {
+                        reviewsList = [{user: "System", text: "تطبيق ممتاز ومستقر جداً!"}];
+                    }
+
+                    let reviewsHtml = reviewsList.map(r => `<div class="review-item"><strong>${r.user}:</strong> ${r.text}</div>`).join('');
+
                     card.innerHTML = `
                         <div>
                             <div class="card-top">
                                 <img src="${iconUrl}" class="app-favicon" alt="App Icon">
                                 <div class="card-header">
                                     <h3>${appName} <span class="badge">${ext}</span></h3>
+                                    <div class="developer-name">By ${devName}</div>
                                     <p>${appDesc}</p>
                                 </div>
                             </div>
+                            
+                            <!-- النجوم والتقييم -->
+                            <div class="stars-container">
+                                ⭐⭐⭐⭐⭐ <span>(4.9 / 5.0)</span>
+                            </div>
+
                             <div class="file-meta">
                                 File: <strong>${decodeURIComponent(fileName)}</strong>
                             </div>
+
+                            <!-- صندوق التعليقات -->
+                            <div class="reviews-box">
+                                <h5>User Reviews</h5>
+                                <div id="reviews-list-${app.id}">
+                                    ${reviewsHtml}
+                                </div>
+                            </div>
+
+                            <!-- إضافة تعليق سريع -->
+                            <div class="add-review-row">
+                                <input type="text" id="review-input-${app.id}" placeholder="أضف تعليقك...">
+                                <button onclick="addReview(${app.id})">تعليق</button>
+                            </div>
                         </div>
+
                         <a href="${fileUrl}" download="${decodeURIComponent(fileName)}" class="app-download-btn">
                             ⬇ Download Direct (${ext})
                         </a>
@@ -407,13 +540,44 @@
             }
         }
 
+        async function addReview(appId) {
+            const input = document.getElementById(`review-input-${appId}`);
+            const text = input.value.trim();
+            if(!text) return;
+
+            try {
+                // جلب التطبيق الحالي
+                const { data: appData, error: fetchErr } = await supabaseClient.from('apps').select('reviews').eq('id', appId).single();
+                if(fetchErr) throw fetchErr;
+
+                let currentReviews = [];
+                try {
+                    currentReviews = typeof appData.reviews === 'string' ? JSON.parse(appData.reviews) : (appData.reviews || []);
+                } catch(e) {
+                    currentReviews = [];
+                }
+
+                currentReviews.push({ user: "مستخدم", text: text });
+
+                // تحديث قاعدة البيانات
+                const { error: updateErr } = await supabaseClient.from('apps').update({ reviews: JSON.stringify(currentReviews) }).eq('id', appId);
+                if(updateErr) throw updateErr;
+
+                input.value = '';
+                fetchApps();
+            } catch(err) {
+                alert('فشل إضافة التعليق: ' + err.message);
+            }
+        }
+
         async function publishApp() {
             const name = document.getElementById('appName').value.trim();
+            const developer = document.getElementById('appDev').value.trim() || 'Zozen Official';
             const description = document.getElementById('appDesc').value.trim();
             const publishBtn = document.getElementById('publishBtn');
 
             if (!name || !selectedFile) {
-                alert('Please enter the Application Name and drop an APK/AAB file.');
+                alert('Please enter the Application Name and select an APK/AAB file.');
                 return;
             }
 
@@ -442,8 +606,10 @@
                     .from('apps')
                     .insert([{ 
                         name, 
+                        developer,
                         description, 
-                        exe_url: directFileUrl 
+                        exe_url: directFileUrl,
+                        reviews: JSON.stringify([{user: "System", text: "تم نشر التطبيق بنجاح في المتجر."}])
                     }]);
 
                 if (dbError) throw dbError;
@@ -451,12 +617,12 @@
                 alert('Package uploaded and published successfully!');
                 
                 document.getElementById('appName').value = '';
+                document.getElementById('appDev').value = '';
                 document.getElementById('appDesc').value = '';
                 selectedFile = null;
                 fileInput.value = '';
                 dropZone.classList.remove('has-file');
-                dropZoneText.textContent = 'Drag & Drop your APK or AAB file here';
-                dropZoneSubtext.textContent = 'or click to browse from your device';
+                dropZoneText.innerHTML = 'Drag & Drop your APK or AAB file here';
                 
                 fetchApps();
             } catch (err) {
