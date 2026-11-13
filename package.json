@@ -1,0 +1,14 @@
+{
+  "name": "zozen-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zozen Store Desktop Application",
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.6.3"
+  }
+}

@@ -137,7 +137,6 @@
             line-height: 1.4;
         }
 
-        /* نظام النجوم */
         .stars-container {
             display: flex;
             align-items: center;
@@ -163,7 +162,6 @@
             border: 1px solid var(--border-color);
         }
 
-        /* قسم التعليقات المصغر داخل البطاقة */
         .reviews-box {
             background: #fff;
             border: 1px solid var(--border-color);
@@ -443,7 +441,59 @@
             selectedFile = file;
             const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
             dropZone.classList.add('has-file');
-            dropZoneText.innerHTML = `✅ Selected: <strong>${file.name}</strong> <br><span style="font-size:12px; color:#555;">Type: .${ext.toUpperCase()} | Size: ${sizeMB} MB</span>`;
+            dropZoneText.innerHTML = `✅ Selected: <strong>${file.name}</strong> <br><span style="font-size:12px; color:#555;>Type: .${ext.toUpperCase()} | Size: ${sizeMB} MB</span>`;
+        }
+
+        // دالة لاكتشاف هل المتجر يعمل داخل نظام Doors OS (حتى لو كـ iframe أو نافذة داخلية)
+        function isInDoorsOS() {
+            try {
+                return window.self !== window.top || window.parent.document.getElementById('os-body') !== null || window.location.href.includes('doors') || window.parent.zIndexCounter !== undefined;
+            } catch (e) {
+                return false; // في حال قيود الحماية الصليبية (CORS)
+            }
+        }
+
+        // دالة معالجة التحميل داخل النظام أو خارجة
+        function handleAppDownload(event, appName, fileUrl, ext) {
+            event.preventDefault();
+
+            if (isInDoorsOS()) {
+                // إذا كنا داخل Doors OS، نقوم بحفظه في نظام الملفات الوهمي أو سطح المكتب عبر مراسلة الأب (Parent)
+                try {
+                    let userItems = [];
+                    try {
+                        userItems = JSON.parse(window.parent.localStorage.getItem('doors_os_user_items')) || [];
+                    } catch(err) { userItems = []; }
+
+                    // إضافة التطبيق كأيقونة أو ملف داخل نظام Doors OS
+                    userItems.push({
+                        id: 'app_' + Date.now(),
+                        title: appName,
+                        type: ext.toLowerCase() === 'apk' || ext.toLowerCase() === 'aab' ? 'app' : 'txt',
+                        url: fileUrl
+                    });
+
+                    window.parent.localStorage.setItem('doors_os_user_items', JSON.stringify(userItems));
+                    
+                    // تحديث شبكة سطح المكتب داخل النظام تلقائياً إن وجد التابع
+                    if (typeof window.parent.renderDesktopGrid === 'function') {
+                        window.parent.renderDesktopGrid();
+                    }
+
+                    alert(`تم تنزيل وتثبيت "${appName}" بنجاح داخل نظام Doors OS!`);
+                } catch(err) {
+                    console.error("Doors OS integration error:", err);
+                    window.location.href = fileUrl; // Fallback
+                }
+            } else {
+                // التحميل العادي خارج النظام
+                const a = document.createElement('a');
+                a.href = fileUrl;
+                a.download = `${appName}.${ext}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
         }
 
         async function fetchApps() {
@@ -479,7 +529,6 @@
                         ? 'https://cdn-icons-png.flaticon.com/512/226/226770.png' 
                         : 'https://cdn-icons-png.flaticon.com/512/5977/5977575.png';
 
-                    // تحضير التعليقات (إذا كانت مخزنة كـ JSON أو مصفوفة، وإلا عرض تعليق افتراضي ترحيبي)
                     let reviewsList = [];
                     try {
                         reviewsList = typeof app.reviews === 'string' ? JSON.parse(app.reviews) : (app.reviews || []);
@@ -504,7 +553,6 @@
                                 </div>
                             </div>
                             
-                            <!-- النجوم والتقييم -->
                             <div class="stars-container">
                                 ⭐⭐⭐⭐⭐ <span>(4.9 / 5.0)</span>
                             </div>
@@ -513,7 +561,6 @@
                                 File: <strong>${decodeURIComponent(fileName)}</strong>
                             </div>
 
-                            <!-- صندوق التعليقات -->
                             <div class="reviews-box">
                                 <h5>User Reviews</h5>
                                 <div id="reviews-list-${app.id}">
@@ -521,14 +568,13 @@
                                 </div>
                             </div>
 
-                            <!-- إضافة تعليق سريع -->
                             <div class="add-review-row">
                                 <input type="text" id="review-input-${app.id}" placeholder="أضف تعليقك...">
                                 <button onclick="addReview(${app.id})">تعليق</button>
                             </div>
                         </div>
 
-                        <a href="${fileUrl}" download="${decodeURIComponent(fileName)}" class="app-download-btn">
+                        <a href="#" onclick="handleAppDownload(event, '${appName}', '${fileUrl}', '${ext}')" class="app-download-btn">
                             ⬇ Download Direct (${ext})
                         </a>
                     `;
@@ -546,7 +592,6 @@
             if(!text) return;
 
             try {
-                // جلب التطبيق الحالي
                 const { data: appData, error: fetchErr } = await supabaseClient.from('apps').select('reviews').eq('id', appId).single();
                 if(fetchErr) throw fetchErr;
 
@@ -559,7 +604,6 @@
 
                 currentReviews.push({ user: "مستخدم", text: text });
 
-                // تحديث قاعدة البيانات
                 const { error: updateErr } = await supabaseClient.from('apps').update({ reviews: JSON.stringify(currentReviews) }).eq('id', appId);
                 if(updateErr) throw updateErr;
 

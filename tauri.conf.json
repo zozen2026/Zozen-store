@@ -1,0 +1,30 @@
+{
+  "build": {
+    "devPath": "http://127.0.0.1:5500",
+    "distDir": "../"
+  },
+  "package": {
+    "productName": "Zozen Store",
+    "version": "1.0.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": true
+    },
+    "bundle": {
+      "active": true,
+      "identifier": "com.zozen.store",
+      "icon": [],
+      "targets": "all"
+    },
+    "windows": [
+      {
+        "title": "Zozen Store",
+        "width": 1200,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ]
+  }
+}
